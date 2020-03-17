@@ -1,5 +1,20 @@
 == The Project
 
+
+Troubleshooting this project
+```
+# Start the HTTP server
+
+;; lein repl
+;; => (user/start)
+
+# Compile the CLJS
+lein run -m shadow.cljs.devtools.cli release main
+
+;; Run the connect-websocket function in the browser console (after going to localhost:3000)
+beatthemarket.client.connect_websocket()
+```
+
 NOTE: The YouTube videos and Developer's Guide are slightly out of date with respect to this template.  This template
 now uses Pathom for server-side mutation and query handling.  See `beatthemarket/server_components/pathom_wrappers.clj` and
 `beatthemarket/model/user.clj` for the macro definitions and examples of how to define

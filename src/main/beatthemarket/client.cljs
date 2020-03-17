@@ -11,9 +11,6 @@
             [com.fulcrologic.fulcro.components :as comp]))
 
 
-(defmutation connect-socket [_]
-  (websocket [_] true))
-
 ;; (defonce app (app/fulcro-app {:remotes {:remote (fws/fulcro-websocket-remote {})}}))
 (defonce SPA (atom nil))
 
@@ -30,8 +27,12 @@
     (net/wrap-fulcro-request)))
 
 
-(defn ^:export websocketConnect []
+(defmutation connect-socket [_]
+  (websocket [_] true))
+
+(defn ^:export connect-websocket []
   (comp/transact! SPA `[(connect-socket {})]))
+
 
 (defn ^:export init []
   (reset! SPA (fc/make-fulcro-client
@@ -42,27 +43,5 @@
                  :networking       {:remote (net/fulcro-http-remote
                                               {:url                "/api"
                                                :request-middleware secured-request-middleware})
-                                    :websocket (fws/fulcro-websocket-remote {})
-                                    }}))
+                                    :websocket (fws/fulcro-websocket-remote {})}}))
   (start))
-
-
-;; (defsc Root [this foo]
-;;   {}
-;;   (div "Something new..."))
-;; (defn ^:export init []
-;;   (app/mount! app Root "app"))
-
-
-
-(comment
-
-  (:require [com.fulcrologic.fulcro.mutations :refer [defmutation]]
-            [com.fulcrologic.fulcro.components :as comp])
-
-  (defmutation connect-socket [_]
-    (websocket [_] true))
-
-  (comment
-    ;; trigger it via repl or a button handler
-    (comp/transact! foo.client/SPA `[(connect-socket {})])))

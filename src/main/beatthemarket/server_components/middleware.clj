@@ -25,12 +25,6 @@
    ;; [taoensso.sente.server-adapters.immutant :refer [get-sch-adapter]]
    [taoensso.sente.server-adapters.http-kit :refer [get-sch-adapter]]))
 
-#_(def ^:private not-found-handler
-  (fn [req]
-    {:status  404
-     :headers {"Content-Type" "text/plain"}
-     :body    "NOPE"}))
-
 
 (defn wrap-api [handler uri]
   (fn [request]
@@ -101,8 +95,6 @@
       (ring-handler req))))
 
 
-
-
 (defrecord BeatthemarketWSListener []
   WSListener
   (client-added [this ws-net cid]
@@ -134,42 +126,11 @@
     (fwsp/add-listener websockets beatthemarket-ws-listener)
     (reset! websockets' websockets)
 
-    #_(-> not-found-handler
-          (wrap-api "/api")
-          (fws/wrap-api websockets)
-          server/wrap-transit-params
-          server/wrap-transit-response
-          (wrap-html-routes)
-          ;; If you want to set something like session store, you'd do it against
-          ;; the defaults-config here (which comes from an EDN file, so it can't have
-          ;; code initialized).
-          ;; E.g. (wrap-defaults (assoc-in defaults-config [:session :store] (my-store)))
-          (wrap-defaults defaults-config)
-          wrap-gzip)
-
-    #_(-> not-found-handler
-          (fws/wrap-api websockets)
-          wrap-keyword-params
-          wrap-params
-          (wrap-resource "public")
-          wrap-content-type
-          wrap-not-modified)
-
     (-> not-found-handler
         (wrap-api "/api")
         (fws/wrap-api websockets)
-        ;; wrap-keyword-params
-        ;; wrap-params
-        ;; (wrap-resource "public")
-        ;; wrap-content-type
-        ;; wrap-not-modified
-
         server/wrap-transit-params
         server/wrap-transit-response
         (wrap-html-routes)
-        ;; If you want to set something like session store, you'd do it against
-        ;; the defaults-config here (which comes from an EDN file, so it can't have
-        ;; code initialized).
-        ;; E.g. (wrap-defaults (assoc-in defaults-config [:session :store] (my-store)))
         (wrap-defaults defaults-config)
         wrap-gzip)))
