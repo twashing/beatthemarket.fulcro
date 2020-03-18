@@ -119,7 +119,8 @@
                                  {:http-server-adapter (get-sch-adapter)
                                   :parser-accepts-env? true
                                   ;; See Sente for CSRF instructions
-                                  :sente-options       {:csrf-token-fn nil}}))
+                                  ;; :sente-options       {:csrf-token-fn nil}
+                                  }))
         defaults-config (:ring.middleware/defaults-config config)
         legal-origins   (get config :legal-origins #{"localhost"})]
 
@@ -134,3 +135,12 @@
         (wrap-html-routes)
         (wrap-defaults defaults-config)
         wrap-gzip)))
+
+(comment
+
+  (require '[com.fulcrologic.fulcro.networking.websocket-protocols :refer [push]])
+
+  (let [client-uid (-> @(:connected-uids @websockets')
+                       :any
+                       first)]
+    (push @websockets' client-uid :foo-topic {:foo "bar"})))
