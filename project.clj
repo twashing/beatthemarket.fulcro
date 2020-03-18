@@ -19,4 +19,3 @@
                        :jar-exclusions [#"public/js/test" #"public/js/workspaces" #"public/workspaces.html"]
                        :prep-tasks     ["clean" ["clean"]
                                         "compile" ["run" "-m" "shadow.cljs.devtools.cli" "release" "main"]]}})
-

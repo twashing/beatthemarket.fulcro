@@ -140,7 +140,19 @@
 
   (require '[com.fulcrologic.fulcro.networking.websocket-protocols :refer [push]])
 
+
+  ;; A Pushing a piece of data over Websocket
   (let [client-uid (-> @(:connected-uids @websockets')
                        :any
                        first)]
-    (push @websockets' client-uid :foo-topic {:foo "bar"})))
+    (push @websockets' client-uid :foo-topic {:foo "bar"}))
+
+
+  ;; B Streaming sequence data over Websocket
+  (let [client-uid (-> @(:connected-uids @websockets')
+                       :any
+                       first)
+        nums (take 1000 (repeatedly #(rand-int 10)))]
+
+    (doseq [n nums]
+      (push @websockets' client-uid :foo-topic n))))
