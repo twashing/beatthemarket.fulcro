@@ -136,7 +136,24 @@
         (wrap-defaults defaults-config)
         wrap-gzip)))
 
+
+(defn wave-length
+  ([] (wave-length 64))
+  ([length]
+   (->> (constantly (range 1 length))
+        repeatedly
+        (apply concat))))
+
+(defn sine-wave [length]
+  (let [xaxis (wave-length length)
+        yaxis (->> xaxis
+                   (map #(/ % 10))
+                   (map #(Math/sin %)))]
+    (->> (interleave xaxis yaxis)
+         (partition 2))))
+
 (comment
+
 
   (require '[com.fulcrologic.fulcro.networking.websocket-protocols :refer [push]])
 
@@ -155,4 +172,25 @@
         nums (take 1000 (repeatedly #(rand-int 10)))]
 
     (doseq [n nums]
-      (push @websockets' client-uid :foo-topic n))))
+      (push @websockets' client-uid :foo-topic n)))
+
+
+
+  ;; C Generate SINE Wave
+  (require '[clojure.data.csv :as csv]
+           '[clojure.java.io :as io])
+
+  (let [length 128
+        records (sine-wave length)]
+    (with-open [writer (io/writer "out-file.2.csv")]
+      (csv/write-csv writer (take length records))))
+
+  #_(let [xaxis (wave-length 64)
+          yaxis (->> xaxis
+                     (map #(/ % 10))
+                     (map #(Math/sin %)))
+          records (->> (interleave xaxis yaxis)
+                       (partition 2))]
+
+      (with-open [writer (io/writer "out-file.csv")]
+        (csv/write-csv writer (take 64 records)))))
