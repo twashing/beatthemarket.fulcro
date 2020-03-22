@@ -19,7 +19,10 @@
            ring/ring-core               {:mvn/version "1.7.1"}
            ring/ring-defaults           {:mvn/version "0.3.2"}
 
-           org.clojure/data.csv         {:mvn/version "1.0.0"}}
+           org.clojure/data.csv         {:mvn/version "1.0.0"}
+           com.cognitect/transit-clj    {:mvn/version "1.0.324"}
+           com.cognitect/transit-cljs   {:mvn/version "0.8.256"}}
+
 
  :aliases {:clj-tests {:extra-paths ["src/test"]
                        :main-opts   ["-m" "kaocha.runner"]

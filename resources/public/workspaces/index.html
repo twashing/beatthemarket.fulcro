@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+  </head>
+  <body>
+    <div id="app"></div>
+    <!-- you might need to change the js path depending on your configuration -->
+    <script src="/workspaces/js/main.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+
+    <script>
+     import { ResponsiveLine } from '@nivo/line'
+     // make sure parent container have a defined height when using
+     // responsive component, otherwise height will be 0 and
+     // no chart will be rendered.
+     // website examples showcase many properties,
+     // you'll often use just a few of them.
+     const data = [
+         {
+             "id": "japan",
+             "color": "hsl(199, 70%, 50%)",
+             "data": [
+                 {
+                     "x": "plane",
+                     "y": 247
+                 },
+                 {
+                     "x": "helicopter",
+                     "y": 112
+                 },
+                 {
+                     "x": "boat",
+                     "y": 90
+                 },
+                 {
+                     "x": "train",
+                     "y": 43
+                 },
+                 {
+                     "x": "subway",
+                     "y": 204
+                 },
+                 {
+                     "x": "bus",
+                     "y": 100
+                 },
+                 {
+                     "x": "car",
+                     "y": 83
+                 },
+                 {
+                     "x": "moto",
+                     "y": 205
+                 },
+                 {
+                     "x": "bicycle",
+                     "y": 267
+                 },
+                 {
+                     "x": "horse",
+                     "y": 178
+                 },
+                 {
+                     "x": "skateboard",
+                     "y": 54
+                 },
+                 {
+                     "x": "others",
+                     "y": 194
+                 }
+             ]
+         },
+         {
+             "id": "france",
+             "color": "hsl(96, 70%, 50%)",
+             "data": [
+                 {
+                     "x": "plane",
+                     "y": 16
+                 },
+                 {
+                     "x": "helicopter",
+                     "y": 142
+                 },
+                 {
+                     "x": "boat",
+                     "y": 62
+                 },
+                 {
+                     "x": "train",
+                     "y": 119
+                 },
+                 {
+                     "x": "subway",
+                     "y": 77
+                 },
+                 {
+                     "x": "bus",
+                     "y": 75
+                 },
+                 {
+                     "x": "car",
+                     "y": 1
+                 },
+                 {
+                     "x": "moto",
+                     "y": 84
+                 },
+                 {
+                     "x": "bicycle",
+                     "y": 56
+                 },
+                 {
+                     "x": "horse",
+                     "y": 88
+                 },
+                 {
+                     "x": "skateboard",
+                     "y": 82
+                 },
+                 {
+                     "x": "others",
+                     "y": 257
+                 }
+             ]
+         },
+         {
+             "id": "us",
+             "color": "hsl(180, 70%, 50%)",
+             "data": [
+                 {
+                     "x": "plane",
+                     "y": 253
+                 },
+                 {
+                     "x": "helicopter",
+                     "y": 135
+                 },
+                 {
+                     "x": "boat",
+                     "y": 246
+                 },
+                 {
+                     "x": "train",
+                     "y": 253
+                 },
+                 {
+                     "x": "subway",
+                     "y": 153
+                 },
+                 {
+                     "x": "bus",
+                     "y": 45
+                 },
+                 {
+                     "x": "car",
+                     "y": 108
+                 },
+                 {
+                     "x": "moto",
+                     "y": 284
+                 },
+                 {
+                     "x": "bicycle",
+                     "y": 64
+                 },
+                 {
+                     "x": "horse",
+                     "y": 203
+                 },
+                 {
+                     "x": "skateboard",
+                     "y": 112
+                 },
+                 {
+                     "x": "others",
+                     "y": 269
+                 }
+             ]
+         },
+         {
+             "id": "germany",
+             "color": "hsl(80, 70%, 50%)",
+             "data": [
+                 {
+                     "x": "plane",
+                     "y": 105
+                 },
+                 {
+                     "x": "helicopter",
+                     "y": 254
+                 },
+                 {
+                     "x": "boat",
+                     "y": 2
+                 },
+                 {
+                     "x": "train",
+                     "y": 12
+                 },
+                 {
+                     "x": "subway",
+                     "y": 208
+                 },
+                 {
+                     "x": "bus",
+                     "y": 163
+                 },
+                 {
+                     "x": "car",
+                     "y": 187
+                 },
+                 {
+                     "x": "moto",
+                     "y": 241
+                 },
+                 {
+                     "x": "bicycle",
+                     "y": 244
+                 },
+                 {
+                     "x": "horse",
+                     "y": 42
+                 },
+                 {
+                     "x": "skateboard",
+                     "y": 285
+                 },
+                 {
+                     "x": "others",
+                     "y": 26
+                 }
+             ]
+         },
+         {
+             "id": "norway",
+             "color": "hsl(207, 70%, 50%)",
+             "data": [
+                 {
+                     "x": "plane",
+                     "y": 33
+                 },
+                 {
+                     "x": "helicopter",
+                     "y": 152
+                 },
+                 {
+                     "x": "boat",
+                     "y": 9
+                 },
+                 {
+                     "x": "train",
+                     "y": 12
+                 },
+                 {
+                     "x": "subway",
+                     "y": 32
+                 },
+                 {
+                     "x": "bus",
+                     "y": 23
+                 },
+                 {
+                     "x": "car",
+                     "y": 235
+                 },
+                 {
+                     "x": "moto",
+                     "y": 284
+                 },
+                 {
+                     "x": "bicycle",
+                     "y": 18
+                 },
+                 {
+                     "x": "horse",
+                     "y": 128
+                 },
+                 {
+                     "x": "skateboard",
+                     "y": 232
+                 },
+                 {
+                     "x": "others",
+                     "y": 275
+                 }
+             ]
+         }]
+
+     const MyResponsiveLine = ({ data /* see data tab */ }) => (
+         <ResponsiveLine
+         data={data}
+         margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
+         xScale={{ type: 'point' }}
+         yScale={{ type: 'linear', min: -15, max: 400, stacked: false, reverse: false }}
+         curve="monotoneX"
+         axisTop={null}
+         axisRight={null}
+         axisBottom={{
+             orient: 'bottom',
+             tickSize: 5,
+             tickPadding: 5,
+             tickRotation: 0,
+             legend: 'transportation',
+             legendOffset: 36,
+             legendPosition: 'middle'
+         }}
+         axisLeft={{
+             orient: 'left',
+             tickSize: 5,
+             tickPadding: 5,
+             tickRotation: 0,
+             legend: 'count',
+             legendOffset: -40,
+             legendPosition: 'middle'
+         }}
+         enableGridX={false}
+         colors={{ scheme: 'nivo' }}
+         lineWidth={1}
+         pointSize={8}
+         pointColor={{ from: 'color', modifiers: [] }}
+         pointBorderWidth={2}
+         pointBorderColor={{ from: 'serieColor' }}
+         pointLabel="y"
+         pointLabelYOffset={-12}
+         useMesh={true}
+         legends={[
+             {
+                 anchor: 'bottom-right',
+                 direction: 'column',
+                 justify: false,
+                 translateX: 100,
+                 translateY: 0,
+                 itemsSpacing: 0,
+                 itemDirection: 'left-to-right',
+                 itemWidth: 80,
+                 itemHeight: 20,
+                 itemOpacity: 0.75,
+                 symbolSize: 12,
+                 symbolShape: 'circle',
+                 symbolBorderColor: 'rgba(0, 0, 0, .5)',
+                 effects: [
+                     {
+                         on: 'hover',
+                         style: {
+                             itemBackground: 'rgba(0, 0, 0, .03)',
+                             itemOpacity: 1
+                         }
+                     }
+                 ]
+             }
+         ]}
+         animate={false}
+         />
+     )
+    </script>
+  </body>
+</html>
