@@ -10,7 +10,8 @@
    [ring.util.response :as resp]
    [hiccup.page :refer [html5]]
    [taoensso.timbre :as log]
-
+   [clj-time.core :as t]
+   [clojure.core.async :as async :refer [chan go-loop >!! alts! timeout]]
 
    [com.fulcrologic.fulcro.server.api-middleware :refer [not-found-handler]]
    [com.fulcrologic.fulcro.networking.websockets :as fws]
@@ -144,13 +145,40 @@
         repeatedly
         (apply concat))))
 
-(defn sine-wave [length]
-  (let [xaxis (wave-length length)
-        yaxis (->> xaxis
-                   (map #(/ % 10))
-                   (map #(Math/sin %)))]
-    (->> (interleave xaxis yaxis)
-         (partition 2))))
+(defn sine-wave
+  ([] (sine-wave 64))
+  ([length]
+   (let [xmultiplier (wave-length length)
+         yaxis (->> xmultiplier
+                    (map #(/ % 10))
+                    (map #(Math/sin %)))
+         xaxis (range)]
+     (->> (interleave xaxis yaxis)
+          (partition 2)))))
+
+(defn sine-wave-with-datetime
+  ([start-time sine-wave] (sine-wave-with-datetime start-time 0 sine-wave))
+  ([start-time y-offset sine-wave]
+   (let [time-seq (iterate #(t/plus % (t/seconds 1)) start-time)]
+     (map (fn [t [_ y]] [t (+ y-offset y)])
+          time-seq
+          sine-wave))))
+
+
+(defn stream-to-client! [push-fn control-chan sine-wave-seq]
+
+  (go-loop [tick-list sine-wave-seq
+            timeout-chan (timeout 500)]
+
+    (let [tick (first tick-list)
+          [v ch] (alts! [control-chan timeout-chan])]
+
+      (when-not (= :exit v)
+
+        (println tick)
+        (push-fn tick)
+        (recur (rest tick-list) (timeout 500))))))
+
 
 (comment
 
@@ -175,7 +203,6 @@
       (push @websockets' client-uid :foo-topic n)))
 
 
-
   ;; C Generate SINE Wave
   (require '[clojure.data.csv :as csv]
            '[clojure.java.io :as io])
@@ -185,12 +212,31 @@
     (with-open [writer (io/writer "out-file.2.csv")]
       (csv/write-csv writer (take length records))))
 
-  #_(let [xaxis (wave-length 64)
-          yaxis (->> xaxis
-                     (map #(/ % 10))
-                     (map #(Math/sin %)))
-          records (->> (interleave xaxis yaxis)
-                       (partition 2))]
 
-      (with-open [writer (io/writer "out-file.csv")]
-        (csv/write-csv writer (take 64 records)))))
+  ;; D Push to Client
+
+  ;; ok convert x values to time stamps
+  ;; ok bump y values by 50
+  ;; ok push new value to client, every 1/2 second
+  ;; TODO put new time values to Highstock graph
+
+  (def sine-wave-seq
+    (->> (sine-wave)
+         (sine-wave-with-datetime (t/date-time 2020 01 01) 20)))
+  (def control-chan (chan))
+
+
+  (def push-fn
+    (fn [[x y]]
+      (let [client-uid (-> @(:connected-uids @websockets')
+                           :any
+                           first)]
+        (push @websockets' client-uid :tick-topic [(str x) y]))))
+
+
+  (stream-to-client! identity control-chan sine-wave-seq)
+  (stream-to-client! push-fn control-chan sine-wave-seq)
+
+
+  (>!! control-chan :exit)
+  )
