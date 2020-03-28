@@ -59,6 +59,51 @@
       [:script {:src "js/main/main.js"}]
       [:script "beatthemarket.client.init();"]]]))
 
+(defn highstock [csrf-token]
+  (log/debug "Serving highstock.html")
+  (html5
+    [:html {:lang "en"}
+     [:head {:lang "en"}
+
+      [:title "Beat The Market"]
+      [:link {:rel "icon" :href "data:;base64,iVBORw0KGgo="}]
+      [:link {:href "https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"
+              :rel "stylesheet"}]
+      [:script ".colleague {
+                  font-style: italic;
+                  color: #999; }"]
+
+      ;; Typekit
+      [:script {:src "https://use.typekit.net/ktm4usi.js"}]
+      [:script "try{Typekit.load({ async: true });}catch(e){}"]
+
+      [:script {:src "https://code.jquery.com/jquery-3.1.1.min.js"}]
+      [:script {:src "https://code.highcharts.com/stock/highstock.js"}]
+      [:script {:src "https://code.highcharts.com/highcharts-more.js"}]
+      [:script {:src "https://code.highcharts.com/stock/modules/exporting.js"}]
+      [:script {:src "https://code.highcharts.com/stock/modules/export-data.js"}]
+
+
+
+      [:meta {:charset "utf-8"}]
+      [:meta {:name "viewport" :content "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"}]
+      ;; [:link {:href "https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"
+      ;;         :rel  "stylesheet"}]
+      ;; [:link {:rel "shortcut icon" :href "data:image/x-icon;," :type "image/x-icon"}]
+      [:script (str "var fulcro_network_csrf_token = '" csrf-token "';")]]
+     [:body {:fullbleed "" :vertical "" :layout "" :style "width:100%; height:100%;"}
+
+      [:div {:class "tk-league-gothic" :style "font-size:3em"} "Beat The Market"]
+      [:div {:class "tk-open-sans"} "Lorem ipsum dolor sit amet"]
+
+      ;; Ensuring users of IE can't use Compatibility Mode, as this will break Persona.
+      ;; (https://developer.mozilla.org/en-US/Persona/Quick_setup)
+      [:meta {:http-equiv "X-UA-Compatible" :content "IE=Edge"}]
+
+      [:div#app]
+      [:script {:src "js/main/main.js"}]
+      [:script "beatthemarket.client.init();"]]]))
+
 ;; ================================================================================
 ;; Workspaces can be accessed via shadow's http server on http://localhost:8023/workspaces.html
 ;; but that will not allow full-stack fulcro cards to talk to your server. This
@@ -87,6 +132,10 @@
       (-> (resp/response (index anti-forgery-token))
           (resp/content-type "text/html"))
 
+      (#{"/highstock" "/highstock.html"} uri)
+      (-> (resp/response (highstock anti-forgery-token))
+          (resp/content-type "text/html"))
+
       ;; See note above on the `wslive` function.
       (#{"/wslive.html"} uri)
       (-> (resp/response (wslive anti-forgery-token))
@@ -94,7 +143,6 @@
 
       :else
       (ring-handler req))))
-
 
 (defrecord BeatthemarketWSListener []
   WSListener
@@ -137,7 +185,6 @@
         (wrap-defaults defaults-config)
         wrap-gzip)))
 
-
 (defn wave-length
   ([] (wave-length 64))
   ([length]
@@ -163,7 +210,6 @@
      (map (fn [t [_ y]] [t (+ y-offset y)])
           time-seq
           sine-wave))))
-
 
 (defn stream-to-client! [push-fn control-chan sine-wave-seq]
 
@@ -219,6 +265,8 @@
   ;; ok bump y values by 50
   ;; ok push new value to client, every 1/2 second
   ;; TODO put new time values to Highstock graph
+  ;;   A. trnasform clj-time values -> epoch time
+  ;;   B. Try with initData if the graph does appear at first
 
   (def sine-wave-seq
     (->> (sine-wave)
@@ -238,5 +286,4 @@
   (stream-to-client! push-fn control-chan sine-wave-seq)
 
 
-  (>!! control-chan :exit)
-  )
+  (>!! control-chan :exit))
