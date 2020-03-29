@@ -27,12 +27,3 @@
   []
   (stop)
   (tools-ns/refresh :after 'user/start))
-
-(comment
-
-  (->> (range 5)
-       constantly
-       repeatedly
-       (reduce (fn [ac v]
-                 (concat ac v)))
-       (take 10)))
