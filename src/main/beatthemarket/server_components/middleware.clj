@@ -11,6 +11,7 @@
    [hiccup.page :refer [html5]]
    [taoensso.timbre :as log]
    [clj-time.core :as t]
+   [clj-time.coerce :as c]
    [clojure.core.async :as async :refer [chan go-loop >!! alts! timeout]]
 
    [com.fulcrologic.fulcro.server.api-middleware :refer [not-found-handler]]
@@ -69,7 +70,7 @@
       [:link {:rel "icon" :href "data:;base64,iVBORw0KGgo="}]
       [:link {:href "https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"
               :rel "stylesheet"}]
-      [:script ".colleague {
+      [:style ".colleague {
                   font-style: italic;
                   color: #999; }"]
 
@@ -101,8 +102,9 @@
       [:meta {:http-equiv "X-UA-Compatible" :content "IE=Edge"}]
 
       [:div#app]
+      [:div#container]
       [:script {:src "js/main/main.js"}]
-      [:script "beatthemarket.client.init();"]]]))
+      #_[:script "beatthemarket.client.init();"]]]))
 
 ;; ================================================================================
 ;; Workspaces can be accessed via shadow's http server on http://localhost:8023/workspaces.html
@@ -279,11 +281,11 @@
       (let [client-uid (-> @(:connected-uids @websockets')
                            :any
                            first)]
-        (push @websockets' client-uid :tick-topic [(str x) y]))))
+        (push @websockets' client-uid :tick-topic [(c/to-long x) y]))))
 
 
   (stream-to-client! identity control-chan sine-wave-seq)
   (stream-to-client! push-fn control-chan sine-wave-seq)
 
-
-  (>!! control-chan :exit))
+  (>!! control-chan :exit)
+  )

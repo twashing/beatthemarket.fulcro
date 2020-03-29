@@ -4,9 +4,7 @@
   "description": "",
   "private": true,
   "dependencies": {
-    "@nivo/line": "^0.61.1",
     "highlight.js": "^9.13.1",
-    "nivo": "^0.31.0",
     "react-grid-layout": "^0.16.6",
     "react-icons": "^2.2.7",
     "reakit": "^0.11.2"
