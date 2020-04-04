@@ -5,14 +5,20 @@ Troubleshooting this project
 ```
 # Start the HTTP server
 
-;; lein repl
-;; => (user/start)
+lein repl
+=> (user/start)
 
 # Compile the CLJS
 lein run -m shadow.cljs.devtools.cli release main
 
+# Watch
+shadow-cljs watch main
+
+# Browser REPL
+shadow-cljs browser-repl main
+
 ;; Run the connect-websocket function in the browser console (after going to localhost:3000)
-beatthemarket.client.connect_websocket()
+> beatthemarket.client.connect_websocket()
 ```
 
 NOTE: The YouTube videos and Developer's Guide are slightly out of date with respect to this template.  This template

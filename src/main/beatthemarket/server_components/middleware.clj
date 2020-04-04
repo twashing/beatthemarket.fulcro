@@ -102,7 +102,6 @@
       [:meta {:http-equiv "X-UA-Compatible" :content "IE=Edge"}]
 
       [:div#app]
-      [:div#container]
       [:script {:src "js/main/main.js"}]
       #_[:script "beatthemarket.client.init();"]]]))
 
