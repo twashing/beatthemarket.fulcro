@@ -26,6 +26,7 @@
                           (log/info "chartOptions / " chartOptions)
                           (.. js/Highcharts (stockChart "stock-chart" chartOptions))))}
 
-  (div :#stock-chart "StockChart Component"))
+  (div :#stock-chart.panel.callout.radius
+       "StockChart Component"))
 
 (def ui-stock-chart (prim/factory StockChart))
