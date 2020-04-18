@@ -63,13 +63,14 @@
 (defn highstock [csrf-token]
   (log/debug "Serving highstock.html")
   (html5
-    [:html {:lang "en"}
+    [:html.no-js {:lang "en"}
      [:head {:lang "en"}
 
       [:title "Beat The Market"]
       [:link {:rel "icon" :href "data:;base64,iVBORw0KGgo="}]
-      [:link {:href "https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"
-              :rel "stylesheet"}]
+      [:link {:rel "stylesheet" :href "https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"}]
+      [:link {:rel "stylesheet" :href "css/foundation.css"}]
+
       [:style ".colleague {
                   font-style: italic;
                   color: #999; }"]
@@ -78,16 +79,22 @@
       [:script {:src "https://use.typekit.net/ktm4usi.js"}]
       [:script "try{Typekit.load({ async: true });}catch(e){}"]
 
-      [:script {:src "https://code.jquery.com/jquery-3.1.1.min.js"}]
+      ;; [:script {:src "https://code.jquery.com/jquery-3.1.1.min.js"}]
       [:script {:src "https://code.highcharts.com/stock/highstock.js"}]
       [:script {:src "https://code.highcharts.com/highcharts-more.js"}]
       [:script {:src "https://code.highcharts.com/stock/modules/exporting.js"}]
       [:script {:src "https://code.highcharts.com/stock/modules/export-data.js"}]
 
-
+      [:script {:src "js/vendor/jquery.js"}]
+      [:script {:src "js/vendor/what-input.js"}]
+      [:script {:src "js/vendor/foundation.min.js"}]
 
       [:meta {:charset "utf-8"}]
       [:meta {:name "viewport" :content "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"}]
+      ;; Ensuring users of IE can't use Compatibility Mode, as this will break Persona.
+      ;; (https://developer.mozilla.org/en-US/Persona/Quick_setup)
+      [:meta {:http-equiv "X-UA-Compatible" :content "IE=Edge"}]
+
       ;; [:link {:href "https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"
       ;;         :rel  "stylesheet"}]
       ;; [:link {:rel "shortcut icon" :href "data:image/x-icon;," :type "image/x-icon"}]
@@ -97,13 +104,12 @@
       [:div {:class "tk-league-gothic" :style "font-size:3em"} "Beat The Market"]
       [:div {:class "tk-open-sans"} "Lorem ipsum dolor sit amet"]
 
-      ;; Ensuring users of IE can't use Compatibility Mode, as this will break Persona.
-      ;; (https://developer.mozilla.org/en-US/Persona/Quick_setup)
-      [:meta {:http-equiv "X-UA-Compatible" :content "IE=Edge"}]
-
       [:div#app]
+      [:script "var global = globalThis || global || window;"]
       [:script {:src "js/main/main.js"}]
-      #_[:script "beatthemarket.client.init();"]]]))
+      [:script "$(document).foundation();"]
+
+      ]]))
 
 ;; ================================================================================
 ;; Workspaces can be accessed via shadow's http server on http://localhost:8023/workspaces.html

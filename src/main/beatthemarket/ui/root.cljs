@@ -15,5 +15,4 @@
    :componentDidMount (fn [_] (log/info (prim/get-initial-state Root {})))}
 
   (div
-    (h3 "Root Component")
     (stock-chart/ui-stock-chart {})))
