@@ -21,6 +21,17 @@ shadow-cljs browser-repl main
 > beatthemarket.client.connect_websocket()
 ```
 
+Shadow-cljs Browser REPL
+```
+$ shadow-cljs clj-repl
+=> (shadow/watch :main)
+=> (shadow/repl :main)
+
+=> (shadow/repl :main)
+```
+
+
+
 NOTE: The YouTube videos and Developer's Guide are slightly out of date with respect to this template.  This template
 now uses Pathom for server-side mutation and query handling.  See `beatthemarket/server_components/pathom_wrappers.clj` and
 `beatthemarket/model/user.clj` for the macro definitions and examples of how to define
