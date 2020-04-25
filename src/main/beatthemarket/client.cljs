@@ -70,6 +70,13 @@
 
 (comment
 
+  ;; shadow-cljs clj-repl
+  (shadow/watch :main)
+  (shadow/repl :main)
+
+  (shadow/repl :main)
+
+
   (ns beatthemarket.client)
   (require '[com.fulcrologic.fulcro.algorithms.merge :as merge]
            '[com.fulcrologic.fulcro.routing.dynamic-routing :as dr]

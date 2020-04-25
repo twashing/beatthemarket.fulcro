@@ -12,7 +12,6 @@
 
 (defsc Index [this {:index/keys [id text]}]
   {:query [:index/id :index/text]
-   ;; :ident :index/id
    :ident (fn [] [:component/id :index])
    :route-segment ["index"]
    :initial-state {:index/id 1
@@ -24,7 +23,6 @@
 
 (defsc Landing [this {:landing/keys [id text]}]
   {:query [:landing/id :landing/text]
-   ;; :ident [:landing/id :landing/id]
    :ident (fn [] [:component/id :landing])
    :route-segment ["landing"]
    :initial-state {:landing/id 1
@@ -36,7 +34,6 @@
 
 (defsc Settings [this {:settings/keys [id text]}]
   {:query [:settings/id :settings/text]
-   ;; :ident [:settings/id :settings/id]
    :ident (fn [] [:component/id :settings])
    :route-segment ["settings"]
    :initial-state {:settings/id 1
@@ -48,7 +45,6 @@
 
 (defsc Game [this {:game/keys [id text]}]
   {:query [:game/id :game/text]
-   ;; :ident [:game/id :game/id]
    :ident (fn [] [:component/id :game])
    :route-segment ["game"]
    :initial-state {:game/id 1
