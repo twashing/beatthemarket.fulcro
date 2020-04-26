@@ -4,10 +4,10 @@
            bk/ring-gzip                 {:mvn/version "0.3.0"}
            com.taoensso/timbre          {:mvn/version "4.10.0"}
            com.wsscode/pathom           {:mvn/version "2.2.15"}
-           fulcrologic/fulcro           {:mvn/version "2.8.11"}
-           fulcrologic/fulcro-incubator {:mvn/version "0.0.35"}
-           com.fulcrologic/fulcro       {:mvn/version "3.0.0" :scope "provided"}
-           com.fulcrologic/fulcro-websockets {:mvn/version "3.1.0"}
+           ;; fulcrologic/fulcro           {:mvn/version "2.8.11"}
+           ;; fulcrologic/fulcro-incubator {:mvn/version "0.0.35"}
+           com.fulcrologic/fulcro       {:mvn/version "3.2.3" :scope "provided"}
+           com.fulcrologic/fulcro-websockets {:mvn/version "3.1.1"}
            com.taoensso/sente           {:mvn/version "1.15.0"}
 
            garden                       {:mvn/version "1.3.6"}
@@ -15,7 +15,7 @@
            http-kit                     {:mvn/version "2.3.0"}
            mount                        {:mvn/version "0.1.14"}
            org.clojure/clojure          {:mvn/version "1.10.1"}
-           org.clojure/core.async       {:mvn/version "0.4.500"}
+           org.clojure/core.async       {:mvn/version "1.0.567"}
            ring/ring-core               {:mvn/version "1.7.1"}
            ring/ring-defaults           {:mvn/version "0.3.2"}
 
@@ -23,9 +23,8 @@
            com.cognitect/transit-clj    {:mvn/version "1.0.324"}
            com.cognitect/transit-cljs   {:mvn/version "0.8.256"}
            clj-time                     {:mvn/version "0.15.2"}
-           ;; org.clojure/core.async       {:mvn/version "1.0.567"}
-           }
-
+           kibu/pushy                   {:mvn/version "0.3.8"}
+           edn-query-language/eql       {:mvn/version "0.0.9"}}
 
  :aliases {:clj-tests {:extra-paths ["src/test"]
                        :main-opts   ["-m" "kaocha.runner"]
@@ -41,4 +40,5 @@
                                      nubank/workspaces           {:mvn/version "1.0.3"},
                                      fulcrologic/fulcro-inspect  {:mvn/version "2.2.5"}
                                      org.clojure/tools.namespace {:mvn/version "0.3.0"}
-                                     org.clojure/tools.nrepl     {:mvn/version "0.2.13"}}}}}
+                                     org.clojure/tools.nrepl     {:mvn/version "0.2.13"}
+                                     cider/cider-nrepl           {:mvn/version "0.24.0"}}}}}
