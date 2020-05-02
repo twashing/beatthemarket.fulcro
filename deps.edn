@@ -24,7 +24,12 @@
            com.cognitect/transit-cljs   {:mvn/version "0.8.256"}
            clj-time                     {:mvn/version "0.15.2"}
            kibu/pushy                   {:mvn/version "0.3.8"}
-           edn-query-language/eql       {:mvn/version "0.0.9"}}
+           edn-query-language/eql       {:mvn/version "0.0.9"}
+
+           ;; org.clojure/math.numeric-tower   {:mvn/version "0.0.4"}
+           org.apache.commons/commons-math3 {:mvn/version "3.6.1"}
+           ;; incanter                         {:mvn/version "1.9.3"}
+           }
 
  :aliases {:clj-tests {:extra-paths ["src/test"]
                        :main-opts   ["-m" "kaocha.runner"]
