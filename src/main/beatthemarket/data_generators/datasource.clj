@@ -360,6 +360,46 @@
   [q, w]
   (print-method '<- w) (print-method (seq q) w) (print-method '-< w))
 
+(defn sine+cosine [x]
+  (+ (Math/sin x)
+     (Math/cos
+       (* (Math/sqrt 3)
+          x))))
+
+(defn generate-cosine-sequence []
+  (map #(Math/cos
+          (* (Math/sqrt 3)
+             %))
+       (range)))
+
+(defn generate-oscillating-sequence []
+  (->> (core/generate-prices 15 20)
+       (map :last)))
+
+
+(comment
+
+  (require '[clojure.data.csv :as csv]
+           '[clojure.java.io :as io])
+
+  (with-open [output-writer (io/writer "out.combined.csv")]
+    (let [length 128
+          xaxis (range)
+
+          ysines (generate-sine-sequence)
+          yconsines (generate-cosine-sequence)
+          yoscillatings (generate-oscillating-sequence)
+          yaxis (map (fn [& args]
+                       (apply + args))
+                     ysines
+                     yconsines
+                     yoscillatings)]
+
+      (->> (interleave xaxis yaxis)
+           (partition 2)
+           (take length)
+           (csv/write-csv output-writer)))))
+
 (comment
 
   ;; (def bdist1 (BetaDistribution. 2.0 5.0))
@@ -388,11 +428,6 @@
   (require '[clojure.data.csv :as csv]
            '[clojure.java.io :as io])
 
-  (defn sine+cosine [x]
-    (+ (Math/sin x)
-       (Math/cos
-         (* (Math/sqrt 3)
-            x))))
 
   (let [length 128]
 
@@ -453,6 +488,7 @@
              (csv/write-csv oscillating-writer))))))
 
 
+
 ;; Traversing Data
 ;; loop / recur (find-xintercept)
 
@@ -468,4 +504,3 @@
 
 ;; sorting, grouping, filtering, dequeing
 ;; Scalars: numbers & precision
-
