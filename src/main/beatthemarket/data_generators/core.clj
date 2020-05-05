@@ -49,7 +49,7 @@
                     newlow (if (< newprice low) newprice low)
                     newhigh (if (> newprice high) newprice high)]
 
-                ;; (println (str "[" last " | " low " | " high "] <=> k[" k "] / kPM[" kPM "] / newprice[" newprice "]"))
+                (println (str "[" last " | " low " | " high "] <=> k[" k "] / kPM[" kPM "] / newprice[" newprice "]"))
                 {:last newprice}))
             {:last last-price})))
 

@@ -110,7 +110,7 @@
 ;; => randomize phase entry point
 ;; => randomize sample length of phase (between 50% - 100%)
 
-(comment
+#_(comment
 
   ;; find x-intercepts both left and right from x=0.
   (find-xintercept - polynomial-xintercept)
@@ -123,9 +123,8 @@
   -1.570796325802803
 
   (find-xintercept + sine-xintercept)
-  1.570796325802803
+  1.570796325802803)
 
-  )
 
 ;; stolen from lazytest - no longer under active development
 ;; https://github.com/stuartsierra/lazytest/blob/master/modules/lazytest/src/main/clojure/lazytest/random.clj
@@ -377,6 +376,10 @@
        (map :last)))
 
 
+;; TODO Cleanup
+;; put into fn
+;; make configurable, which algorithms to combine
+;; stop oscillating from going from i. vanishing or ii. exploding
 (comment
 
   (require '[clojure.data.csv :as csv]
@@ -399,6 +402,107 @@
            (partition 2)
            (take length)
            (csv/write-csv output-writer)))))
+
+
+;; NOTE
+
+;; Beta Distribution for these things
+;; A. Direction of price changes
+;;   Level 1: More increasing price changes than decreasing
+;;   Level 5: Equal swings between increasing price changes -> decreasing
+;;   Level 10: More decreasing price changes than increasing
+
+;; B. Occurence of high vs low price changes
+;;   Level 1: Big price changes
+;;   Level 10: Small price changes
+
+;; C. Number of ticks before changing beta distribution for direction of price change
+;;   Level 1: Midpoint distribution for when to change price direction
+(comment
+
+  ;; Greater price swings at opposite ends
+  ;; alpha = beta = 0.5
+
+  ;; Prices within 0.25 / 0.75
+  ;; alpha = beta = 2.0
+
+  ;; Prices closer to the high end
+  ;; alpha = 5 / beta = 1
+
+  ;; Prices closer to the low end
+  ;; alpha = 1 / beta = 3
+  ;; alpha = 1 / beta = 5
+
+  ;; https://en.wikipedia.org/wiki/Beta_distribution
+
+  (def beta-distribution (BetaDistribution. 2.0 2.0))
+  (def betas (repeatedly #(.sample beta-distribution)))
+
+  (require '[clojure.data.csv :as csv]
+           '[clojure.java.io :as io])
+
+  (with-open [writer-midpoint (io/writer "out.beta-midpoint.csv")
+              writer-bigswings (io/writer "out.beta-bigswings.csv")
+              writer-highend (io/writer "out.beta-highend.csv")
+              writer-lowend-a (io/writer "out.beta-lowend-a.csv")
+              writer-lowend-b (io/writer "out.beta-lowend-b.csv")]
+    (let [length 128
+          xaxis (range)
+
+          beta-midpoint (BetaDistribution. 2.0 2.0)
+          yaxis (repeatedly #(.sample beta-midpoint))
+
+          beta-bigswings (BetaDistribution. 0.5 0.5)
+          ybigswings (repeatedly #(.sample beta-bigswings))
+
+          beta-highend (BetaDistribution. 3 1)
+          yhighend (repeatedly #(.sample beta-highend))
+
+          beta-loend-a (BetaDistribution. 1 3)
+          ylowend-a (repeatedly #(.sample beta-loend-a))
+
+          beta-lowend-b (BetaDistribution. 1 5)
+          ylowend-b (repeatedly #(.sample beta-lowend-b))]
+
+      (->> (interleave xaxis yaxis)
+           (partition 2)
+           (take length)
+           (csv/write-csv writer-midpoint))
+
+      (->> (interleave xaxis ybigswings)
+           (partition 2)
+           (take length)
+           (csv/write-csv writer-bigswings))
+
+      (->> (interleave xaxis yhighend)
+           (partition 2)
+           (take length)
+           (csv/write-csv writer-highend))
+
+      (->> (interleave xaxis ylowend-a)
+           (partition 2)
+           (take length)
+           (csv/write-csv writer-lowend-a))
+
+      (->> (interleave xaxis ylowend-b)
+           (partition 2)
+           (take length)
+           (csv/write-csv writer-lowend-b)))))
+
+
+;; NOTE
+
+;; BetaDistribution for these parameters (both Sine + Polynomial)
+
+;; A. Vertical
+
+;; B. Wave Length
+;;   Level 1: i. Larger wave lengths (WL);
+;;            ii. WL dilation is smaller;
+;;            iii. Less occurrence of WL dilation
+;;   Level 10: i. medium WLs
+;;             ii. WL dilation is medium
+;;             iii. Larger occurence of wave length dilation
 
 (comment
 
@@ -486,8 +590,6 @@
              (partition 2)
              (take length)
              (csv/write-csv oscillating-writer))))))
-
-
 
 ;; Traversing Data
 ;; loop / recur (find-xintercept)
