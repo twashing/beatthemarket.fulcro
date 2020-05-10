@@ -27,9 +27,8 @@
            edn-query-language/eql       {:mvn/version "0.0.9"}
 
            ;; org.clojure/math.numeric-tower   {:mvn/version "0.0.4"}
-           org.apache.commons/commons-math3 {:mvn/version "3.6.1"}
            ;; incanter                         {:mvn/version "1.9.3"}
-           }
+           org.apache.commons/commons-math3 {:mvn/version "3.6.1"}}
 
  :aliases {:clj-tests {:extra-paths ["src/test"]
                        :main-opts   ["-m" "kaocha.runner"]
@@ -46,4 +45,11 @@
                                      fulcrologic/fulcro-inspect  {:mvn/version "2.2.5"}
                                      org.clojure/tools.namespace {:mvn/version "0.3.0"}
                                      org.clojure/tools.nrepl     {:mvn/version "0.2.13"}
-                                     cider/cider-nrepl           {:mvn/version "0.24.0"}}}}}
+                                     cider/cider-nrepl           {:mvn/version "0.24.0"}}}
+
+           :shadow-cljs {:extra-deps {fulcrologic/fulcro-spec     {:mvn/version "3.0.1"}
+                                      binaryage/devtools          {:mvn/version "0.9.10"}
+                                      nubank/workspaces           {:mvn/version "1.0.3"},
+                                      fulcrologic/fulcro-inspect  {:mvn/version "2.2.5"}
+                                      thheller/shadow-cljs        {:mvn/version "2.9.0"}}
+                         :main-opts ["-m" "shadow.cljs.devtools.cli"]}}}

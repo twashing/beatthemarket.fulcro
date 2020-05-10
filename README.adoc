@@ -5,11 +5,13 @@ Troubleshooting this project
 ```
 # Start the HTTP server
 
+# Leiningen
 lein repl
 => (user/start)
 
 # Compile the CLJS
 lein run -m shadow.cljs.devtools.cli release main
+
 
 # Watch
 shadow-cljs watch main
@@ -23,11 +25,21 @@ shadow-cljs browser-repl main
 
 Shadow-cljs Browser REPL
 ```
-$ shadow-cljs clj-repl
+λ shadow-cljs clj-repl
 => (shadow/watch :main)
 => (shadow/repl :main)
+```
 
-=> (shadow/repl :main)
+Cljs / deps.edn
+
+```
+λ clj -A:dev -C:deps -Sdeps '{:deps {nrepl {:mvn/version "0.6.0"}}}' -m nrepl.cmdline --interactive
+```
+
+Using shadow-cljs through deps.edn
+```
+λ clj -A:shadow-cljs clj-repl main  # OR
+λ clj -A:shadow-cljs watch main
 ```
 
 

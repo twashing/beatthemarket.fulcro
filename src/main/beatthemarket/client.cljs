@@ -105,22 +105,22 @@
 
 (defn ^:export init []
 
-  (reset! app (app/fulcro-app {;; :client-did-mount (fn [beatthemarket]
-                               ;;                     (df/load beatthemarket :all-users stock-chart/StockChart))
-                               ;;
-                               ;; :remotes {:remote (net/fulcro-http-remote
-                               ;;                     {:url                "/api"
-                               ;;                      ;; :request-middleware secured-request-middleware
-                               ;;                      })
-                               ;;           :websocket (fws/fulcro-websocket-remote
-                               ;;                        {;; :csrf-token js/fulcro_network_csrf_token
-                               ;;                         :push-handler push-handler
-                               ;;                         :state-callback state-callback})}
+  (reset! app (app/fulcro-app {:client-did-mount (fn [beatthemarket]
+                                                   (df/load beatthemarket :all-users stock-chart/StockChart))
+
+                               :remotes {:remote (net/fulcro-http-remote
+                                                   {:url "http://localhost:3000/api"  ;; "/api"
+                                                    ;; :request-middleware secured-request-middleware
+                                                    })
+                                         :websocket (fws/fulcro-websocket-remote
+                                                      {;; :csrf-token js/fulcro_network_csrf_token
+                                                       :push-handler push-handler
+                                                       :state-callback state-callback})}
                                }))
+
   (app/mount! @app root/Root "app" {:initialize-state? true})
   (dr/initialize! @app)
-  (pushy/start! history)
-  #_(dr/change-route app (dr/path-to root/Index)))
+  (pushy/start! history))
 
 
 ;; TODO On initial load, use URI route
