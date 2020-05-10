@@ -58,16 +58,26 @@
         ast        (eql/query->ast root-query)]
     (some? (dr/ast-node-for-route ast path))))
 
+
+(declare history)
+
+(defn route-to! [path]
+
+  ;; (log/info "route-to! /" path)
+  (dr/change-route app path)
+  (pushy/set-token! history (path->url path)))
+
 (def default-route ["index"])
 
 (defonce history (pushy/pushy
                    (fn [path]
                      (log/info "pushy/pushy A /" path)
-                     (dr/change-route app path))
+                     ;; (dr/change-route app path)
+                     (route-to! path))
                    (fn [url]
-                     (log/info "pushy/pushy B /" url)
+                     ;; (log/info "pushy/pushy B /" url)
                      (let [path (url->path url)]
-                       (log/info "pushy/pushy B.i /" path)
+                       ;; (log/info "pushy/pushy B.i /" path)
                        (if (routable-path? app path)
                          path
                          default-route)))))
@@ -97,7 +107,7 @@
 
   (reset! app (app/fulcro-app {;; :client-did-mount (fn [beatthemarket]
                                ;;                     (df/load beatthemarket :all-users stock-chart/StockChart))
-
+                               ;;
                                ;; :remotes {:remote (net/fulcro-http-remote
                                ;;                     {:url                "/api"
                                ;;                      ;; :request-middleware secured-request-middleware
@@ -110,12 +120,8 @@
   (app/mount! @app root/Root "app" {:initialize-state? true})
   (dr/initialize! @app)
   (pushy/start! history)
-  (dr/change-route app (dr/path-to root/Index)))
+  #_(dr/change-route app (dr/path-to root/Index)))
 
-(defn route-to! [path]
-
-  ;; (log/info "route-to! /" path)
-  (pushy/set-token! history (path->url path)))
 
 ;; TODO On initial load, use URI route
 ;; TODO Fix route-to mutation
@@ -130,8 +136,6 @@
 
   ;; shadow-cljs clj-repl
   (shadow/watch :main)
-  (shadow/repl :main)
-
   (shadow/repl :main)
 
 
@@ -155,4 +159,5 @@
 
   (route-to! ["settings"])
   (route-to! ["game"])
+  (route-to! ["index"])
   (route-to {:path (dr/path-to root/Settings)}))
