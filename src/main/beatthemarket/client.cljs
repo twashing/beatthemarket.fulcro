@@ -72,12 +72,9 @@
 (defonce history (pushy/pushy
                    (fn [path]
                      (log/info "pushy/pushy A /" path)
-                     ;; (dr/change-route app path)
                      (route-to! path))
                    (fn [url]
-                     ;; (log/info "pushy/pushy B /" url)
                      (let [path (url->path url)]
-                       ;; (log/info "pushy/pushy B.i /" path)
                        (if (routable-path? app path)
                          path
                          default-route)))))
@@ -109,7 +106,7 @@
                                                    (df/load beatthemarket :all-users stock-chart/StockChart))
 
                                :remotes {:remote (net/fulcro-http-remote
-                                                   {:url "http://localhost:3000/api"  ;; "/api"
+                                                   {:url "/api"
                                                     ;; :request-middleware secured-request-middleware
                                                     })
                                          :websocket (fws/fulcro-websocket-remote

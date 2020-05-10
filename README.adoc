@@ -32,14 +32,15 @@ Shadow-cljs Browser REPL
 
 Cljs / deps.edn
 
-```
-λ clj -A:dev -C:deps -Sdeps '{:deps {nrepl {:mvn/version "0.6.0"}}}' -m nrepl.cmdline --interactive
-```
-
 Using shadow-cljs through deps.edn
 ```
 λ clj -A:shadow-cljs clj-repl main  # OR
 λ clj -A:shadow-cljs watch main
+```
+
+Using main code through deps.edn
+```
+λ clj -A:dev -C:deps -Sdeps '{:deps {nrepl {:mvn/version "0.6.0"}}}' -m nrepl.cmdline --interactive
 ```
 
 

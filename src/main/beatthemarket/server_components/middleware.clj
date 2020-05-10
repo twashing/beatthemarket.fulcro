@@ -175,7 +175,7 @@
                                  {:http-server-adapter (get-sch-adapter)
                                   :parser-accepts-env? true
                                   ;; See Sente for CSRF instructions
-                                  :sente-options       {:csrf-token-fn nil}
+                                  ;; :sente-options       {:csrf-token-fn nil}
                                   }))
         defaults-config (:ring.middleware/defaults-config config)
         legal-origins   (get config :legal-origins #{"localhost"})]
@@ -292,5 +292,4 @@
   (stream-to-client! identity control-chan sine-wave-seq)
   (stream-to-client! push-fn control-chan sine-wave-seq)
 
-  (>!! control-chan :exit)
-  )
+  (>!! control-chan :exit))

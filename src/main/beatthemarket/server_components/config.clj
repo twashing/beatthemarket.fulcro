@@ -20,4 +20,3 @@
            (log/info "Loaded config" config)
            (configure-logging! configuration)
            configuration))
-
